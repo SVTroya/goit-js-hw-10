@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 const DOG_API_KEY = 'live_Mlq52c1ZOJh91BuIHgCjbsbMLNU9HiGamBhos6dGnoOpfCwYihzaY62fc640KidM'
 const CAT_API_KEY = 'live_FDfPizYGe5KVsKSxrn22ndt8Htokk5XB9VMOuH7S7qFxcCFxyX8LVE81ev0QxQO8'
 

@@ -10,13 +10,15 @@
 </head>
 <body>
 <h1 class='text header choice'></h1>
-<label class='text selector is-hidden'>
-  <span class='label-select'>Select breed</span>
-  <select class='text label-select breed-select'></select>
-</label>
+<div class='text selector is-hidden'>
+  <label class='text label-select' for='breed'>Select breed</label>
+  <div class='breed-select'>
+    <select class='text' id='breed'></select>
+  </div>
+</div>
 <div class='text breed-info is-hidden'></div>
-<p class='loader'></p>
-<p class='error'>Oops! Something went wrong! Try reloading the page!</p>
+<p class='loader is-hidden'></p>
+<p class='text error is-hidden'>Oops! Something went wrong! Try reloading the page!</p>
 
 <script src='js/pet.js' type='module'></script>
 </body>
