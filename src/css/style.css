@@ -1,0 +1,85 @@
+body {
+    background-image: url(../images/bckg.jpg);
+    background-repeat: repeat;
+}
+
+.text {
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    background-color: white;
+    text-align: center;
+    border: 5px solid goldenrod;
+    border-radius: 20px;
+    padding: 8px;
+}
+
+.main-choice {
+    padding-top: 100px;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+}
+
+.main-choice a {
+    border-radius: 20px;
+}
+
+.main-choice a{
+    background-position: center;
+    background-size: cover;
+    background-clip: content-box;
+    background-repeat: no-repeat;
+    min-width: 500px;
+    height: 333px;
+    transform: scale(1);
+    border: 5px solid goldenrod;
+    transition:
+            transform 200ms ease-in-out,
+            border-color 200ms ease-in-out;
+}
+
+.main-choice a.cat{
+    background-image: url(../images/cat.jpg);
+}
+
+.main-choice a.dog{
+    background-image: url(../images/dog.jpg);
+}
+
+.main-choice a:hover {
+    transform: scale(1.05);
+}
+
+.main-choice a.cat:hover {
+    border-color: red;
+}
+
+.main-choice a.dog:hover {
+    border-color: forestgreen;
+}
+
+.header {
+    width: 800px;
+    font-weight: 700;
+    font-size: 60px;
+    margin: 100px auto 0;
+    padding: 20px;
+}
+
+label {
+    display: inline-block;
+    margin-top: 40px;
+}
+
+.label-select {
+    font-family: 'Comfortaa', sans-serif;
+}
+
+.header.choice {
+    width: fit-content;
+}
+
+.temperament-header {
+    font-weight: 700;
+}
