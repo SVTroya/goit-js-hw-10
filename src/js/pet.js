@@ -8,13 +8,16 @@ const breedSelectEl = document.querySelector('select.breed-select')
 const breedInfoEl = document.querySelector('div.breed-info')
 const headerEl = document.querySelector('h1.choice')
 
-let animalType = null
+//let animalType = 'cat'
+let animalType = ''
 
 window.addEventListener('load', onLoad)
 breedSelectEl.addEventListener('change', onSelect)
 
 function onLoad() {
-  let headerText = "I don't what an animal it is 🤷‍♀️. But ok."
+  animalType = localStorage.getItem("pet-type") || 'dog'
+  localStorage.removeItem("pet-type")
+  let headerText = "I don't know what an animal it is 🤷‍♀️. But ok."
   switch (animalType) {
     case 'dog': headerText = DOG_HEADER
       break
@@ -23,7 +26,7 @@ function onLoad() {
   }
   headerEl.textContent = headerText
 
-  fetchBreeds()
+  fetchBreeds(animalType)
     .then(data => {
       const storedBreeds = data.filter(dogInfo => dogInfo.image?.url != null)
       const optionsMarkup = storedBreeds.map(breedInfo => `<option value='${breedInfo.id}'>${breedInfo.name}</option>`).join('')
@@ -35,19 +38,21 @@ function onLoad() {
 }
 
 function onSelect(event) {
-  fetchDogByBreed(event.target.value)
+  fetchDogByBreed(animalType, event.target.value)
     .then(dogInfo => {
       if (!dogInfo.length) {
         return
       }
-      const { breeds, url } = dogInfo[0]
+      const {url, breeds: [{ bred_for, temperament, name, description }]} = dogInfo[0]
+      //const { breeds, url } = dogInfo[0]
       breedInfoEl.innerHTML =
-        `<img src='${url}' alt='${breeds[0].name}' width='400'/>
-      <div>
-        <h2>${breeds[0].name}</h2>
-        <p>${breeds[0].bred_for || ''}</p>
-        <p><span class='temperament-header'>Temperament: </span>${breeds[0].temperament}</p>
+        `<img class='animal-img' src='${url}' alt='${name}' width='400' loading='lazy'/>
+      <div class='breed-info-right'>
+        <h2 class='breed-name'>${name}</h2>
+        <p>${description || bred_for || ''}</p>
+        <p class='temper'><span class='temperament-header'>Temperament: </span>${temperament}</p>
       </div>`
+      breedInfoEl.classList.remove('is-hidden')
     })
     .catch(function(error) {
       console.log(error)
