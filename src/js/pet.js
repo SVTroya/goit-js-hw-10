@@ -16,9 +16,8 @@ window.addEventListener('load', onLoad)
 breedSelectEl.addEventListener('change', onSelect)
 
 function onLoad() {
-  loaderEl.classList.remove('is-hidden')
+  showEls(loaderEl)
   animalType = localStorage.getItem("pet-type") || 'dog'
-  localStorage.removeItem("pet-type")
   let headerText = "I don't know what an animal it is 🤷‍♀️. But ok."
   switch (animalType) {
     case 'dog': headerText = DOG_HEADER
@@ -29,52 +28,64 @@ function onLoad() {
   headerEl.textContent = headerText
   fetchBreeds(animalType)
     .then(data => {
-      let storedBreeds = [{id: -1, name:''}]
+      let storedBreeds = []
       storedBreeds.push(...data.filter(dogInfo => dogInfo.image?.url != null))
-      const optionsMarkup = storedBreeds.map(breedInfo => `<option value='${breedInfo.id}'>${breedInfo.name}</option>`).join('')
+      const optionsMarkup = storedBreeds.map(breedInfo =>
+        `<option value='${breedInfo.id}'>${breedInfo.name}</option>`)
+        .join('')
       breedSelectEl.insertAdjacentHTML('afterbegin', optionsMarkup)
-      breedSelectorEl.classList.remove('is-hidden')
-      loaderEl.classList.add('is-hidden')
+      showPetInfo(breedSelectEl.value)
+      showEls(breedSelectorEl)
+      hideEls(loaderEl)
     })
     .catch(onError)
 }
 
 function onSelect({ target: {value} }) {
-  if (value === '-1') {
-    breedInfoEl.classList.add('is-hidden')
-    return
-  }
-  loaderEl.classList.remove('is-hidden')
-  breedSelectorEl.classList.add('is-hidden')
-  breedInfoEl.classList.add('is-hidden')
-  errorEl.classList.add('is-hidden')
-  fetchDogByBreed(animalType, value)
-    .then(dogInfo => {
-      if (!dogInfo.length) {
-        return
-      }
-      const {url, breeds: [{ bred_for, temperament, name, description }]} = dogInfo[0]
-      breedInfoEl.innerHTML =
-        `<img class='animal-img' src='${url}' alt='${name}' width='400' loading='lazy'/>
+  showPetInfo(value)
+}
+
+function onError(error) {
+  showEls(errorEl)
+  hideEls(loaderEl)
+  console.log(error)
+}
+
+function renderPetInfo(petInfo) {
+  const { url, breeds: [{ bred_for, temperament, name, description }] } = petInfo
+  breedInfoEl.innerHTML =
+    `<img class='animal-img' src='${url}' alt='${name}' width='400' loading='lazy'/>
       <div class='breed-info-right'>
         <h2 class='breed-name'>${name}</h2>
         <p>${description || bred_for || ''}</p>
         <p class='temper'><span class='temperament-header'>Temperament: </span>${temperament}</p>
       </div>`
-      loaderEl.classList.add('is-hidden')
-      breedInfoEl.classList.remove('is-hidden')
-      breedSelectorEl.classList.remove('is-hidden')
+}
+
+function hideEls(...elements) {
+  elements.forEach(element => element.classList.add('is-hidden'))
+}
+
+function showEls(...elements) {
+  elements.forEach(element => element.classList.remove('is-hidden'))
+}
+
+function showPetInfo(id) {
+  showEls(loaderEl)
+  hideEls(breedSelectorEl, breedInfoEl, errorEl)
+  fetchDogByBreed(animalType, id)
+    .then(response => {
+      if (!response.length) {
+        return
+      }
+      renderPetInfo(response[0])
+      hideEls(loaderEl)
+      showEls(breedSelectorEl, breedInfoEl)
     })
     .catch(function(error) {
       onError(error)
-      breedSelectorEl.classList.remove('is-hidden')
+      showEls(breedSelectorEl)
     })
-}
-
-function onError(error) {
-  errorEl.classList.remove('is-hidden')
-  loaderEl.classList.add('is-hidden')
-  console.log(error)
 }
 
 
