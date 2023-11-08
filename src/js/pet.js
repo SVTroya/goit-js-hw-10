@@ -12,7 +12,7 @@ const errorEl = document.querySelector('p.error')
 
 let animalType = ''
 
-window.addEventListener('load', onLoad)
+onLoad()
 breedSelectEl.addEventListener('change', onSelect)
 
 function onLoad() {

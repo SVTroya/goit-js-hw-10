@@ -2,7 +2,8 @@ const mainChoiceEl = document.querySelector('.main-choice')
 
 mainChoiceEl.addEventListener('click', onMainChoiceClick)
 
-window.onload = () => {
+onLoad()
+function onLoad() {
   localStorage.removeItem("pet-type")
 }
 function onMainChoiceClick({target}) {
